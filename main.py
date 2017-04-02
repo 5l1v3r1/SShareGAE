@@ -88,14 +88,15 @@ def index():
         # 生成页面
         qr = qrcode.QRCode(error_correction=qrcode.constants.ERROR_CORRECT_H, box_size=4, border=1)
         uri = "{0}:{1}@{2}:{3}".format(ss_server.method, ss_server.password, ss_server.server, ss_server.server_port)
-        data = "ss://{0}#{1}".format(base64.b64encode(uri).replace('\n', '').replace('=', ''), ss_server.remarks)
+        data = "ss://{0}#{1}".format(base64.b64encode(uri).replace('\n', '').replace('=', ''), ss_server.remarks.replace('#', '%23'))
         qr.add_data(data)
         qr.make(fit=True)
         img = qr.make_image()
         f = BytesIO()
         img.save(f, format='PNG')
         f.seek(0)
-        img_string = base64.b64encode(f.read())
+        img_byte = f.read()
+        img_string = base64.b64encode(img_byte)
         # 存储
         ndb.put_multi([act_code, ss_server])
 
@@ -105,28 +106,32 @@ def index():
             message.sender = 'noreply@{0}.appspotmail.com'.format(app_identity.get_application_id())
             message.subject = "{0} info".format(ss_server.remarks)
             message.to = form.email.data
-            message.attachments = [("qr.png", f.read())]
+            message.attachments = [("qr.png", img_byte)]
             message.body = """
 server:{0}
 server_port:{1}
 method:{2}
 password:{3}
 the qrcode as attachments
-            """.format(ss_server.server, ss_server.server_port, ss_server.method, ss_server.password)
+                """.format(ss_server.server, ss_server.server_port, ss_server.method, ss_server.password)
             message.html = """
-                <html><head></head><body>
-                    <h1>{0}</h1>
-                    <p>Server:<span>{1}</span></p>
-                    <p>Port:<span>{2}</span></p>
-                    <p>method:{<span>{3}</span></p>
-                    <p>password:<span>{4}</span></p>
-                    <p>QRCode:</p>
-                    <p>
-                    <img src="data:image/png;base64,{5}" />
-                    </p>
-                    <p>the qrcode also as attachments</p>
-                </body></html>
-            """.format(ss_server.remarks, ss_server.server, ss_server.server_port, ss_server.method, ss_server.password,
+<html><head></head><body>
+    <h1>{0}</h1>
+    <p>Server:<span>{1}</span></p>
+    <p>Port:<span>{2}</span></p>
+    <p>method:<span>{3}</span></p>
+    <p>password:<span>{4}</span></p>
+    <p>QRCode:</p>
+    <p>
+    <img src="data:image/png;base64,{5}" />
+    </p>
+    <p>the qrcode also as attachments</p>
+</body></html>
+            """.format(ss_server.remarks,
+                       ss_server.server,
+                       ss_server.server_port,
+                       ss_server.method,
+                       ss_server.password,
                        img_string)
             message.send()
         except:
@@ -200,34 +205,3 @@ def add_server():
     else:
         return render_template("info.html", msg="ERROR! No Json file "), 555
 
-# @app.route('/api', methods=['GET', 'POST'])
-# def api():
-#     data = request.values.get('data', "parameter 'data' is empty\n")
-#
-#     try:
-#         size = int(request.values.get('size'))
-#         if size < 1 or size > 100:
-#             size = 4
-#     except:
-#         size = 4
-#
-#     ecl = request.values.get('ecl', "L")
-#
-#     if ecl not in ['L', 'M', 'Q', 'H']:
-#         ecl = 'M'
-#     qr = qrcode.QRCode(error_correction=ecl_map[ecl],box_size=size, border=1)
-#     qr.add_data(data)
-#     try:
-#         qr.make()
-#     except DataOverflowError:
-#         return "Error, Data Too Long",400
-#
-#     img = qr.make_image()
-#
-#
-#     #
-#     strIO = StringIO.StringIO()
-#     img.save(strIO)
-#     strIO.seek(0)
-#
-#     return send_file(strIO , mimetype='image/png')
