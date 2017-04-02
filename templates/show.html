@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta name="description" content="QR Code Generator">
+    <meta name="Author" content="Lien Tian">
+    <meta charset="UTF-8">
+    <title>SShare</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+
+</head>
+<body>
+
+<div class="header">
+    <div class="header-main">
+        <div class="headerlogo">
+            <a href="{{ url_for('index') }}">SShare</a>
+        </div>
+        <div class="headermenu">
+            <ul>
+                <li><a href="https://liantian.me/" title="ToolBox">LIANTIAN&#39;S LOG</a></li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<div class="content post entry ">
+    <h1>{{ ss_server.remarks }}</h1>
+    <p>地址：<span>{{ ss_server.server }}</span></p>
+    <p>端口：<span>{{ ss_server.server_port }}</span></p>
+    <p>加密方式：<span>{{ ss_server.method }}</span></p>
+    <p>密码：<span>{{ ss_server.password }}</span></p>
+    <p>二维码：</p>
+    <p>
+    <img src="data:image/png;base64,{{ img_string }}" />
+    </p>
+</div>
+
+
+<div class="footer">
+    <p><a href="https://github.com/liantian-cn/SShareGAE">Source Code</a></p>
+    <p> &copy; 2010-2017 liantian.me, All Rights Reserved.</p>
+</div>
+
+
+</body>
+</html>
+
+
+

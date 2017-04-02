@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta name="description" content="QR Code Generator">
+    <meta name="Author" content="Lien Tian">
+    <meta charset="UTF-8">
+    <title>SShare Admin</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+
+</head>
+<body>
+
+<div class="header">
+    <div class="header-main">
+        <div class="headerlogo">
+            <a href="{{ url_for('admin') }}">SShare Admin</a>
+        </div>
+        <div class="headermenu">
+            <ul>
+                <li><a href="https://liantian.me/" title="ToolBox">LIANTIAN&#39;S LOG</a></li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<div class="content post entry ">
+    <h1>Shadowsocks Server</h1>
+    <table>
+        <thead>
+        <tr>
+            <th>Remarks</th>
+            <th>Server</th>
+            <th>Port</th>
+            <th>Method</th>
+            <th>Password</th>
+            <th>User</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for server in all_server %}
+            <tr>
+                <td>{{ server.remarks }}</td>
+                <td>{{ server.server }}</td>
+                <td>{{ server.server_port }}</td>
+                <td>{{ server.method }}</td>
+                <td>{{ server.password }}</td>
+                <td>{{ server.user }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <h1>ADD Server</h1>
+    <form action="{{ url_for("add_server") }}" method="post" enctype="multipart/form-data">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+        <p>上传服务器配置文件，json格式：<input type="file" name="file"></p>
+
+        <input type="submit" value="提交"/>
+    </form>
+    <hr/>
+    <h1>Activation Code</h1>
+    <table>
+        <thead>
+        <tr>
+            <th>Used</th>
+            <th>Enable</th>
+            <th>Code</th>
+            <th>User</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for act_code in all_act_code %}
+            <tr>
+                <td>{{ act_code.used }}</td>
+                <td>{{ act_code.enable }}</td>
+                <td>{{ act_code.code }}</td>
+                <td>{{ act_code.user }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <h1>ADD Code</h1>
+    <form action="{{ url_for("add_code") }}" method="post">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+        <p>
+            数量:
+            <select name="num">
+                {% for i in range(1,10) %}
+                    <option value="{{ i }}" {% if i==2 %} selected="selected" {% endif %}>{{ i }}</option>
+                {% endfor %}
+            </select>
+        </p>
+
+        <input type="submit" value="提交"/>
+    </form>
+
+
+</div>
+
+
+<div class="footer">
+    <p><a href="https://github.com/liantian-cn/SShareGAE">Source Code</a></p>
+    <p> &copy; 2010-2017 liantian.me, All Rights Reserved.</p>
+</div>
+
+
+</body>
+</html>
+
+
+

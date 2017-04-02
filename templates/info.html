@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta name="description" content="QR Code Generator">
+    <meta name="Author" content="Lien Tian">
+    <meta charset="UTF-8">
+    <title>SShare Admin</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+
+</head>
+<body>
+
+<div class="header">
+    <div class="header-main">
+        <div class="headerlogo">
+            <a href="{{ url_for('admin') }}">SShare Admin</a>
+        </div>
+        <div class="headermenu">
+            <ul>
+                    <li><a href="https://liantian.me/" title="ToolBox">LIANTIAN&#39;S LOG</a></li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<div class="content post entry ">
+    <h1>{{ msg }}</h1>
+ </div>
+
+
+<div class="footer">
+            <p><a href="https://github.com/liantian-cn/SShareGAE">Source Code</a></p>
+            <p> &copy; 2010-2017 liantian.me, All Rights Reserved.</p>
+</div>
+
+
+</body>
+</html>
+
+
+

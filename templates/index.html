@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta name="description" content="QR Code Generator">
+    <meta name="Author" content="Lien Tian">
+    <meta charset="UTF-8">
+    <title>SShare</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+
+</head>
+<body>
+
+<div class="header">
+    <div class="header-main">
+        <div class="headerlogo">
+            <a href="{{ url_for('index') }}">SShare</a>
+        </div>
+        <div class="headermenu">
+            <ul>
+                <li><a href="https://liantian.me/" title="ToolBox">LIANTIAN&#39;S LOG</a></li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<div class="content post entry ">
+    <h1>SShare</h1>
+    <p>输入激活码获取唯一的隧道，每个隧道支持64个TCP长链接，足够2-4人使用。</p>
+
+    <form action="{{ url_for("index") }}" method="post">
+        {{ form.csrf_token }}
+        <p>ActivationCode：{{ form.code(size=12) }}</p>
+        <p>邮箱：{{ form.email(size=40) }}</p>
+        <p>输入正确的邮箱，将会发送二维码到邮箱</p>
+        {% if form.errors %}
+            {% for field in form.errors %}
+                {% for error in form.errors[field] %}
+                    <div class="alert alert-error">
+                        {{ form[field].label }} : {{ error }}
+                    </div>
+                {% endfor %}
+            {% endfor %}
+        {% endif %}
+        <input type="submit" value="提交"/>
+    </form>
+</div>
+
+
+<div class="footer">
+    <p><a href="https://github.com/liantian-cn/SShareGAE">Source Code</a></p>
+    <p> &copy; 2010-2017 liantian.me, All Rights Reserved.</p>
+</div>
+
+
+</body>
+</html>
+
+
+
